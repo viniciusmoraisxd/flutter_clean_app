@@ -33,13 +33,13 @@ void main() {
   ClientSpy client;
   String url;
 
+  setUp(() {
+    client = ClientSpy();
+    sut = HttpAdapter(client);
+    url = faker.internet.httpUrl();
+  });
   group('Post Tests', () {
     test('Should call post with correct values', () async {
-      client = ClientSpy();
-      sut = HttpAdapter(client);
-
-      url = faker.internet.httpUrl();
-
       await sut
           .request(url: url, method: 'post', body: {'any_key': 'any_value'});
 
@@ -70,5 +70,9 @@ void main() {
         ),
       );
     });
+
+    // test('Should return a data if status code 200', () async {
+    //   when()
+    // });
   });
 }
