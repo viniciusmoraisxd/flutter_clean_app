@@ -18,6 +18,13 @@ void main() {
     url = faker.internet.httpUrl();
   });
 
+  group('Shared', () {
+    test('Should throw ServerError if an invalid method is provided', () async {
+      final future = sut.request(url: url, method: 'invalid_method');
+
+      expect(future, throwsA(HttpError.serverError));
+    });
+  });
   group('Post Tests', () {
     PostExpectation mockRequest() => when(
         client.post(any, headers: anyNamed('headers'), body: anyNamed('body')));
@@ -103,7 +110,7 @@ void main() {
 
       expect(future, throwsA(HttpError.badRequest));
     });
-    
+
     test('Should return an UnauthorizedErrod if status code 401', () async {
       mockResponse(401);
 
