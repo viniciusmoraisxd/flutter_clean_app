@@ -112,6 +112,14 @@ void main() {
       expect(future, throwsA(HttpError.unauthorized));
     });
 
+    test('Should return an ForbiddenError if status code 403', () async {
+      mockResponse(403);
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
     test('Should return a NotFoundError if status code 404', () async {
       mockResponse(404);
 
