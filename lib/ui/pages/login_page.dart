@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     RaisedButton(
-                      onPressed: () {},
+                      onPressed: null,
                       child: Text('Logar'),
                     ),
                     FlatButton.icon(
