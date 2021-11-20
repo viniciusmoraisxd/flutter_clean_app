@@ -155,4 +155,17 @@ void main() {
 
     expect(button.onPressed, isNotNull);
   });
+
+  testWidgets("Should disable button if form is invalid",
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(false);
+
+    await tester.pump();
+
+    final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+
+    expect(button.onPressed, isNull);
+  });
 }
