@@ -18,17 +18,23 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: 0.7.5
   test: 1.15.0
   mockito: 3.0.2
   faker: 1.3.0
-
 flutter:
   uses-material-design: true
-
-  
   assets:
     - lib/ui/assets/
-   
+    
+flutter_icons:
+  ios: true
+  android: true
+  image_path_android: lib/ui/assets/icon/android.png
+  image_path_ios: lib/ui/assets/icon/ios.png
+  adaptive_icon_background: lib/ui/assets/icon/background.png
+  adaptive_icon_foreground: lib/ui/assets/icon/foreground.png   
 
 
   # fonts:
