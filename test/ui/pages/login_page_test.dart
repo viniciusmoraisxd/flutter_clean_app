@@ -3,10 +3,14 @@ import 'package:flutter_clean_app/ui/pages/pages.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets("Should load with correct initial state",
-      (WidgetTester tester) async {
+  Future<void> loadPage(WidgetTester tester) async {
     final loginPage = MaterialApp(home: LoginPage());
     await tester.pumpWidget(loginPage);
+  }
+
+  testWidgets("Should load with correct initial state",
+      (WidgetTester tester) async {
+    await loadPage(tester);
 
     final emailTextChildren = find.descendant(
         of: find.bySemanticsLabel("E-mail"), matching: find.byType(Text));
@@ -25,4 +29,9 @@ void main() {
 
     expect(button.onPressed, null);
   });
+
+  // testWidgets("Should load with correct initial state",
+  //     (WidgetTester tester) async {
+  //   loadPage(tester);
+  // });
 }
