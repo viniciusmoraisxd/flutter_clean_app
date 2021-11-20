@@ -16,12 +16,13 @@ void main() {
     presenter = LoginPresenterSpy();
     emailErrorController = StreamController<String>();
 
-    when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
+    when(presenter.emailErrorStream)
+        .thenAnswer((_) => emailErrorController.stream);
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
 
-  tearDown((){
+  tearDown(() {
     emailErrorController.close();
   });
 
@@ -60,7 +61,6 @@ void main() {
     verify(presenter.validatePassword(password));
   });
 
-
   testWidgets("Should present error if email is invalid",
       (WidgetTester tester) async {
     await loadPage(tester);
@@ -69,5 +69,30 @@ void main() {
     await tester.pump();
 
     expect(find.text('any_error'), findsOneWidget);
+  });
+  testWidgets("Should present no error if email is valid",
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add(null);
+    await tester.pump();
+
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel("E-mail"), matching: find.byType(Text)),
+        findsOneWidget);
+  });
+
+  testWidgets("Should present no error if email is valid",
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add("");
+    await tester.pump();
+
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel("E-mail"), matching: find.byType(Text)),
+        findsOneWidget);
   });
 }
