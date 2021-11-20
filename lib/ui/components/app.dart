@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_clean_app/ui/pages/pages.dart';
 
 class App extends StatelessWidget {
@@ -7,6 +8,8 @@ class App extends StatelessWidget {
     final primaryColor = Color.fromRGBO(136, 14, 79, 1);
     final primaryColorDark = Color.fromRGBO(96, 0, 39, 1);
     final primaryColorLight = Color.fromRGBO(188, 71, 123, 1);
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return MaterialApp(
       title: 'Flutter - TDD, Clean Arch and SOLID',
