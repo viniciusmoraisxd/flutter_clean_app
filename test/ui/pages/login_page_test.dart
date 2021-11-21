@@ -27,7 +27,7 @@ void main() {
 
     when(presenter.isFormValidStream)
         .thenAnswer((_) => isFormValidController.stream);
-        
+
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
@@ -167,5 +167,17 @@ void main() {
     final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
 
     expect(button.onPressed, isNull);
+  });
+
+  testWidgets("Should call auth on form submit", (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+
+    await tester.pump();
+    await tester.tap(find.byType(RaisedButton));
+    await tester.pump();
+
+    verify(presenter.auth()).called(1);
   });
 }
