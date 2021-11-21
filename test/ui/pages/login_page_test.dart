@@ -76,9 +76,7 @@ void main() {
     final passwordTextChildren = find.descendant(
         of: find.bySemanticsLabel("Senha"), matching: find.byType(Text));
 
-    expect(passwordTextChildren, findsOneWidget,
-        reason: "when a TextFormField has only one text child, means it has "
-            "no erros, since one of the childs is always the hint text");
+    expect(passwordTextChildren, findsOneWidget);
 
     final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
 
