@@ -33,12 +33,7 @@ class _LoginPageState extends State<LoginPage> {
 
           widget.presenter.mainErrorStream.listen((error) {
             if (error != null) {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  error.toString(),
-                ),
-                backgroundColor: Colors.red[900],
-              ));
+              showErrorMessage(context, error);
             }
           });
           return SingleChildScrollView(
