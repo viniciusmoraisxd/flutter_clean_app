@@ -25,31 +25,9 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) {
           widget.presenter.isLoadingStream.listen((isLoading) {
             if (isLoading) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                child: SimpleDialog(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Aguarde ...',
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              );
+              showLoadingDialoag(context);
             } else {
-              if (Navigator.canPop(context)) {
-                Navigator.of(context).pop();
-              }
+              hideLoadingDialog(context);
             }
           });
 
