@@ -24,7 +24,6 @@ void main() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
-    mockValidation(value: 'error');
   });
 
   test('Should call validation with correct email', () {
@@ -34,9 +33,14 @@ void main() {
   });
 
   test('Should emit emailerror if validation fails', () {
-    expectLater(sut.emailErrorStream, emits('error'));
+    mockValidation(value: 'error');
+
+    //garante que só vai emitir quando houver ação diferente da anterior
+    sut.emailErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
+
+    sut.validateEmail(email);
     sut.validateEmail(email);
 
-    verify(validation.validate(field: 'email', value: email)).called(1);
   });
 }
