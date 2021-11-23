@@ -28,8 +28,6 @@ class StreamLoginPresenter {
     _state.emailError = validation.validate(field: 'email', value: email);
     _controller.add(_state);
   }
-
-
 }
 
 class ValidationSpy extends Mock implements Validation {}
@@ -39,10 +37,20 @@ void main() {
   StreamLoginPresenter sut;
   String email;
 
+  PostExpectation mockValidationCall({String field}) =>
+      when(validation.validate(
+          field: field == null ? anyNamed('field') : field,
+          value: anyNamed('value')));
+
+  void mockValidation({String field, String value}) {
+    mockValidationCall(field: field).thenReturn(value);
+  }
+
   setUp(() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
+    mockValidation(value: 'error'); 
   });
 
   test('Should call validation with correct email', () {
@@ -52,10 +60,6 @@ void main() {
   });
 
   test('Should emit emailerror if validation fails', () {
-    when(validation.validate(
-            field: anyNamed('field'), value: anyNamed('value')))
-        .thenReturn('error');
-
     expectLater(sut.emailErrorStream, emits('error'));
     sut.validateEmail(email);
 
