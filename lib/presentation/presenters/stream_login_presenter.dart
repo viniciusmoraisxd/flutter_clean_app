@@ -24,11 +24,13 @@ class StreamLoginPresenter {
   void updateState() => _controller.add(_state);
 
   void validateEmail(String email) {
+    _state.email = email;
     _state.emailError = validation.validate(field: 'email', value: email);
     updateState();
   }
 
   void validatePassword(String password) {
+    _state.password = password;
     _state.passwordError =
         validation.validate(field: 'password', value: password);
     updateState();
@@ -36,7 +38,13 @@ class StreamLoginPresenter {
 }
 
 class LoginState {
+  String email;
   String emailError;
+  String password;
   String passwordError;
-  bool get isFormValid => false;
+  bool get isFormValid =>
+      emailError == null &&
+      passwordError == null &&
+      password != null &&
+      email != null;
 }

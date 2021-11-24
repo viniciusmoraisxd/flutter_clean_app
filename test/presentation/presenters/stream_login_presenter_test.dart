@@ -93,7 +93,6 @@ void main() {
   test(
       'Should emit error if a email is invalid and password validation succeds',
       () {
-
     mockValidation(field: 'email', value: 'error'); //apenas email com erro
 
     sut.emailErrorStream
@@ -105,6 +104,18 @@ void main() {
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
+    sut.validatePassword(password);
+  });
+
+  test('Should emit null if a email and password are valid ', () async {
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, null)));
+
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+
+    sut.validateEmail(email);
+    await Future.delayed(Duration.zero);
     sut.validatePassword(password);
   });
 }
