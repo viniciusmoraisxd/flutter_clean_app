@@ -65,7 +65,6 @@ void main() {
     verify(validation.validate(field: 'password', value: password)).called(1);
   });
 
-
   test('Should emit passworderror if validation fails', () {
     mockValidation(value: 'error');
 
@@ -80,7 +79,6 @@ void main() {
   });
 
   test('Should emit null if password validation succeds', () {
-
     //garante que só vai emitir quando houver ação diferente da anterior
     sut.passwordErrorStream
         .listen(expectAsync1((error) => expect(error, null)));
@@ -88,6 +86,25 @@ void main() {
     sut.isFormValidStream
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+  test(
+      'Should emit error if a email is invalid and password validation succeds',
+      () {
+
+    mockValidation(field: 'email', value: 'error'); //apenas email com erro
+
+    sut.emailErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, null)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
     sut.validatePassword(password);
   });
 }
