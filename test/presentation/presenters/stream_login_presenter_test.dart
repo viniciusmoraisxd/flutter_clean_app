@@ -10,6 +10,7 @@ void main() {
   ValidationSpy validation;
   StreamLoginPresenter sut;
   String email;
+  String password;
 
   PostExpectation mockValidationCall({String field}) =>
       when(validation.validate(
@@ -24,6 +25,7 @@ void main() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
+    password = faker.internet.password();
 
     mockValidation(); //success validation
   });
@@ -47,7 +49,7 @@ void main() {
     sut.validateEmail(email);
   });
 
-  test('Should emit null if validation succeds', () {
+  test('Should emit null if email validation succeds', () {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
 
     sut.isFormValidStream
@@ -55,5 +57,37 @@ void main() {
 
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('Should call validation with correct password', () {
+    sut.validatePassword(password);
+
+    verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+
+
+  test('Should emit passworderror if validation fails', () {
+    mockValidation(value: 'error');
+
+    //garante que só vai emitir quando houver ação diferente da anterior
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+  });
+
+  test('Should emit null if password validation succeds', () {
+
+    //garante que só vai emitir quando houver ação diferente da anterior
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, null)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
   });
 }
