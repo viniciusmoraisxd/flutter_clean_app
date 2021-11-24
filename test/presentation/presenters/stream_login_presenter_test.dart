@@ -24,6 +24,8 @@ void main() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
+
+    mockValidation(); //success validation
   });
 
   test('Should call validation with correct email', () {
@@ -39,9 +41,19 @@ void main() {
     sut.emailErrorStream
         .listen(expectAsync1((error) => expect(error, 'error')));
 
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.validateEmail(email);
+  });
 
+  test('Should emit null if validation succeds', () {
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
     sut.validateEmail(email);
   });
 }
