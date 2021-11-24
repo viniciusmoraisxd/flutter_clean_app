@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_clean_app/domain/helpers/domain_error.dart';
 import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 import 'package:meta/meta.dart';
@@ -13,7 +14,8 @@ class StreamLoginPresenter {
       {@required this.validation, @required this.authentication});
 
   var _state = LoginState();
-
+  Stream<String> get mainErrorStream =>
+      _controller.stream.map((state) => state.mainError).distinct();
   Stream<String> get emailErrorStream => _controller.stream
       .map((state) => state.emailError)
       .distinct(); //não emite valores seguidos iguais
@@ -45,14 +47,19 @@ class StreamLoginPresenter {
   Future<void> auth() async {
     _state.isLoading = true;
     updateState();
-    await authentication.auth(
-        AuthenticationParams(email: _state.email, secret: _state.password));
+    try {
+      await authentication.auth(
+          AuthenticationParams(email: _state.email, secret: _state.password));
+    } on DomainError catch (e) {
+      _state.mainError = e.description;
+    }
     _state.isLoading = false;
     updateState();
   }
 }
 
 class LoginState {
+  String mainError;
   String email;
   String emailError;
   String password;
