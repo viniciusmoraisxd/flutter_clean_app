@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:flutter_clean_app/domain/helpers/domain_error.dart';
 import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
+import 'package:flutter_clean_app/ui/pages/login/login_presenter.dart';
 import 'package:meta/meta.dart';
 
-class StreamLoginPresenter {
+class StreamLoginPresenter implements LoginPresenter{
   final Validation validation;
   final Authentication authentication;
   var _controller = StreamController<LoginState>.broadcast();
