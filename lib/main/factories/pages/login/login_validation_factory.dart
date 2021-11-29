@@ -1,6 +1,5 @@
+import 'package:flutter_clean_app/main/builders/builders.dart';
 import 'package:flutter_clean_app/validation/protocols/protocols.dart';
-import 'package:flutter_clean_app/validation/validators/required_field_validation.dart';
-import 'package:flutter_clean_app/validation/validators/validation_composite.dart';
 import 'package:flutter_clean_app/validation/validators/validators.dart';
 
 ValidationComposite makeValidationComposite() =>
@@ -8,8 +7,7 @@ ValidationComposite makeValidationComposite() =>
 
 List<FieldValidation> makeLoginValidations() {
   return [
-    RequiredFieldValidation('email'),
-    EmailValidation('email'),
-    RequiredFieldValidation('password')
+    ...ValidationBuilder.field('email').required().email().build(),
+    ...ValidationBuilder.field('password').required().build(),
   ];
 }
