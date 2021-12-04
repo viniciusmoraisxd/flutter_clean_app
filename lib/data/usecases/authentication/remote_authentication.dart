@@ -3,8 +3,8 @@ import 'package:flutter_clean_app/domain/entities/entities.dart';
 import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:meta/meta.dart';
 
-import '../http/http.dart';
-import '../../domain/usecases/usecases.dart';
+import '../../http/http.dart';
+import '../../../domain/usecases/usecases.dart';
 
 class RemoteAuthentication implements Authentication{
   final HttpClient httpClient;
