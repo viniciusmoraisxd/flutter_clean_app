@@ -1,5 +1,6 @@
 import 'package:flutter_clean_app/main/factories/factories.dart';
 import 'package:flutter_clean_app/main/factories/pages/login/login.dart';
+import 'package:flutter_clean_app/main/factories/usecases/usecases.dart';
 import 'package:flutter_clean_app/presentation/presenters/presenters.dart';
 
 StreamLoginPresenter makeStreamLoginPresenter() => StreamLoginPresenter(
@@ -8,4 +9,5 @@ StreamLoginPresenter makeStreamLoginPresenter() => StreamLoginPresenter(
 
 GetxLoginPresenter makeGetxLoginPresenter() => GetxLoginPresenter(
     validation: makeValidationComposite(),
-    authentication: makeRemoteAuthentication());
+    authentication: makeRemoteAuthentication(),
+    saveCurrentAccount: makeLocalSaveCurrentAccount());
