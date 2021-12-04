@@ -153,6 +153,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.5"
+  flutter_secure_storage:
+    dependency: "direct main"
+    description:
+      name: flutter_secure_storage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.3.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -501,4 +508,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.9.0 <3.0.0"
-  flutter: ">=1.16.0"
+  flutter: ">=1.20.0 <2.0.0"
