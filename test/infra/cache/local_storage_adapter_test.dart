@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_clean_app/data/cache/cache.dart';
+import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -31,10 +32,18 @@ void main() {
     key = faker.lorem.word();
     value = faker.guid.guid();
   });
-  
+
   test('Should call save secure with correct values', () async {
     await sut.saveSecure(key: key, value: value);
 
     verify(secureStorage.write(key: key, value: value));
+  });
+  test('Should throw an Unexpected error if save secure throws', () async {
+    when(sut.saveSecure(key: anyNamed('key'), value: anyNamed('value')))
+        .thenThrow(Exception());
+
+    final future = sut.saveSecure(key: key, value: value);
+
+    expect(future, throwsA(TypeMatcher<Exception>()));
   });
 }
