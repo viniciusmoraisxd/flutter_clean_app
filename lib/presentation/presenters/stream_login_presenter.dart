@@ -6,7 +6,7 @@ import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 import 'package:flutter_clean_app/ui/pages/login/login_presenter.dart';
 import 'package:meta/meta.dart';
 
-class StreamLoginPresenter implements LoginPresenter{
+class StreamLoginPresenter implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
   var _controller = StreamController<LoginState>.broadcast();
@@ -18,11 +18,15 @@ class StreamLoginPresenter implements LoginPresenter{
   Stream<String> get mainErrorStream =>
       _controller?.stream?.map((state) => state.mainError)?.distinct();
 
-  Stream<String> get emailErrorStream => _controller?.stream?.map((state) => state.emailError)
+  Stream<String> get emailErrorStream => _controller?.stream
+      ?.map((state) => state.emailError)
       ?.distinct(); //não emite valores seguidos iguais
 
   Stream<String> get passwordErrorStream =>
       _controller?.stream?.map((state) => state.passwordError)?.distinct();
+
+  Stream<String> get navigateToStream =>
+      _controller?.stream?.map((state) => state.navigateTo)?.distinct();
 
   Stream<bool> get isFormValidStream =>
       _controller?.stream?.map((state) => state.isFormValid)?.distinct();
@@ -70,6 +74,7 @@ class LoginState {
   String emailError;
   String password;
   String passwordError;
+  String navigateTo;
   bool isLoading = false;
   bool get isFormValid =>
       emailError == null &&
