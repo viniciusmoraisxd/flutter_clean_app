@@ -14,6 +14,8 @@ class GetxSplashPresenter implements SplashPresenter {
   @override
   Future<void> checkAccount() async {
     await loadCurrentAccount.load();
+
+    _navigateTo.value = '/surveys';
   }
 
   @override
@@ -25,7 +27,7 @@ class LoadCurrentAccountSpy extends Mock implements LoadCurrentAccount {}
 void main() {
   LoadCurrentAccountSpy loadCurrentAccount;
   GetxSplashPresenter sut;
-  
+
   setUp(() {
     loadCurrentAccount = LoadCurrentAccountSpy();
     sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
@@ -35,5 +37,18 @@ void main() {
     await sut.checkAccount();
 
     verify(loadCurrentAccount.load()).called(1);
+  });
+
+  test('Should call checkAccount', () async {
+    await sut.checkAccount();
+
+    verify(loadCurrentAccount.load()).called(1);
+  });
+
+  test('Should go to SurveysPage on success', () async {
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, '/surveys')));
+
+    await sut.checkAccount();
   });
 }
