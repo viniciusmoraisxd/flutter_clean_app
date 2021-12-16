@@ -17,8 +17,7 @@ class SplashPage extends StatelessWidget {
 }
 
 void main() {
-  testWidgets('Should present a spinner on page load',
-      (WidgetTester tester) async {
+  Future<void> loadPage(WidgetTester tester) async {
     await tester.pumpWidget(
       GetMaterialApp(
         initialRoute: '/',
@@ -27,7 +26,11 @@ void main() {
         ],
       ),
     );
+  }
 
+  testWidgets('Should present a spinner on page load',
+      (WidgetTester tester) async {
+    await loadPage(tester);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }
