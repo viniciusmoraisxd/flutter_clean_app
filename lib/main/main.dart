@@ -18,15 +18,17 @@ class App extends StatelessWidget {
       title: 'Flutter - TDD, Clean Arch and SOLID',
       debugShowCheckedModeBanner: false,
       theme: appTheme(),
-      initialRoute: '/login',
+      initialRoute: '/',
       getPages: [
-        GetPage(name: '/login', page: makeLoginPage),
+        GetPage(name: '/', page: makeSplashPage, transition: Transition.fade),
         GetPage(
-          name: '/surveys',
-          page: () => Scaffold(
-            body: Text('Enquetes'),
-          ),
-        ),
+            name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
+        GetPage(
+            name: '/surveys',
+            page: () => Scaffold(
+                  body: Text('Enquetes'),
+                ),
+            transition: Transition.fadeIn),
       ],
     );
   }
