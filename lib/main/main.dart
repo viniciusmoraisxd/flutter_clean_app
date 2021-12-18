@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clean_app/main/factories/factories.dart';
 import 'package:flutter_clean_app/ui/components/components.dart';
+import 'package:flutter_clean_app/utils/i18n/resources.dart';
 import 'package:get/get.dart';
 
 void main() {
+  R.load(Locale('en', 'US'));
   runApp(App());
 }
 
