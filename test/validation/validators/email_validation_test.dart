@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_clean_app/presentation/protocols/validation.dart';
 import 'package:flutter_clean_app/validation/validators/validators.dart';
 import 'package:test/test.dart';
 
@@ -22,6 +23,6 @@ void main() {
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('vinicius.morais'), 'Campo inválido');
+    expect(sut.validate('vinicius.morais'), ValidationError.invalidField);
   });
 }

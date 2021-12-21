@@ -1,11 +1,12 @@
 import 'package:faker/faker.dart';
-import 'package:flutter_clean_app/domain/entities/account_entity.dart';
-import 'package:flutter_clean_app/domain/helpers/domain_error.dart';
+import 'package:flutter_clean_app/domain/entities/entities.dart';
+import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:flutter_clean_app/presentation/presenters/presenters.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_clean_app/ui/helpers/errors/errors.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
@@ -27,7 +28,7 @@ void main() {
           field: field == null ? anyNamed('field') : field,
           value: anyNamed('value')));
 
-  void mockValidation({String field, String value}) {
+  void mockValidation({String field, ValidationError value}) {
     mockValidationCall(field: field).thenReturn(value);
   }
 
@@ -48,6 +49,7 @@ void main() {
   }
 
   setUp(() {
+    print('teste');
     validation = ValidationSpy();
     saveCurrentAccount = SaveCurrentAccountSpy();
     authentication = AuthenticationSpy();
@@ -69,12 +71,27 @@ void main() {
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
 
-  test('Should emit emailerror if validation fails', () {
-    mockValidation(value: 'error');
+  test('Should emit invalid field if email is invalid', () {
+    mockValidation(value: ValidationError.invalidField);
 
     //garante que só vai emitir quando houver ação diferente da anterior
     sut.emailErrorStream
-        .listen(expectAsync1((error) => expect(error, 'error')));
+        .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
+  });
+
+  test('Should emit required field error if email is empty', () {
+
+   
+    mockValidation(value: ValidationError.requiredField);
+
+    //garante que só vai emitir quando houver ação diferente da anterior
+    sut.emailErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
 
     sut.isFormValidStream
         .listen(expectAsync1((isValid) => expect(isValid, false)));
@@ -98,12 +115,12 @@ void main() {
     verify(validation.validate(field: 'password', value: password)).called(1);
   });
 
-  test('Should emit password error if validation fails', () {
-    mockValidation(value: 'error');
+  test('Should emit required field error if password is empty', () {
+    mockValidation(value: ValidationError.requiredField);
 
     //garante que só vai emitir quando houver ação diferente da anterior
     sut.passwordErrorStream
-        .listen(expectAsync1((error) => expect(error, 'error')));
+        .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
 
     sut.isFormValidStream
         .listen(expectAsync1((isValid) => expect(isValid, false)));
@@ -123,15 +140,10 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test(
-      'Should emit error if a email is invalid and password validation succeds',
-      () {
-    mockValidation(field: 'email', value: 'error'); //apenas email com erro
-
-    sut.emailErrorStream
-        .listen(expectAsync1((error) => expect(error, 'error')));
-    sut.passwordErrorStream
-        .listen(expectAsync1((error) => expect(error, null)));
+  test('Should disable form button if any field is invalid', () {
+    mockValidation(
+        field: 'email',
+        value: ValidationError.invalidField); //apenas email com erro
 
     sut.isFormValidStream
         .listen(expectAsync1((isValid) => expect(isValid, false)));
@@ -140,11 +152,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should emit null if a email and password are valid ', () async {
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
-    sut.passwordErrorStream
-        .listen(expectAsync1((error) => expect(error, null)));
-
+  test('Should enable form button if all fields are valid', () async {
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
     sut.validateEmail(email);
@@ -178,8 +186,8 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((error) =>
-        expect(error, 'Algo errado aconteceu. Tente novamente em breve.')));
+    sut.mainErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.unexpected)));
 
     await sut.auth();
   });
@@ -200,7 +208,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(
-        expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
+        expectAsync1((error) => expect(error, UIError.invalidCredentials)));
 
     await sut.auth();
   });
@@ -211,8 +219,8 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((error) =>
-        expect(error, 'Algo errado aconteceu. Tente novamente em breve.')));
+    sut.mainErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.unexpected)));
 
     await sut.auth();
   });

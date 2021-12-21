@@ -1,7 +1,9 @@
+import 'package:flutter_clean_app/ui/helpers/errors/ui_error.dart';
+
 abstract class LoginPresenter {
-  Stream<String> get emailErrorStream;
-  Stream<String> get passwordErrorStream;
-  Stream<String> get mainErrorStream;
+  Stream<UIError> get emailErrorStream;
+  Stream<UIError> get passwordErrorStream;
+  Stream<UIError> get mainErrorStream;
   Stream<String> get navigateToStream;
   Stream<bool> get isFormValidStream;
   Stream<bool> get isLoadingStream;
