@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter_clean_app/domain/entities/account_entity.dart';
 
 abstract class AddAccount {
-  Future<AccountEntity> add();
+  Future<AccountEntity> add(AddAccountParams params);
 }
 
 class AddAccountParams extends Equatable {
