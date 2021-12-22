@@ -1,61 +1,11 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_clean_app/data/http/http.dart';
-import 'package:flutter_clean_app/data/models/models.dart';
-import 'package:flutter_clean_app/domain/entities/account_entity.dart';
-import 'package:flutter_clean_app/domain/helpers/domain_error.dart';
+import 'package:flutter_clean_app/data/usecases/add_account/add_account.dart';
+
+import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:meta/meta.dart';
-
-class RemoteAddAccount implements AddAccount {
-  final HttpClient httpClient;
-  final String url;
-
-  RemoteAddAccount({@required this.url, @required this.httpClient});
-
-  Future<AccountEntity> add(AddAccountParams params) async {
-    final body = RemoteAddAccountParams.fromDomain(params).toJson();
-
-    try {
-      final response =
-          await httpClient.request(url: url, method: 'post', body: body);
-
-      return RemoteAccountModel.fromJson(response).toEntity();
-    } on HttpError catch (error) {
-      throw error == HttpError.forbidden
-          ? DomainError.emailInUse
-          : DomainError.unexpected;
-    }
-  }
-}
-
-class RemoteAddAccountParams {
-  final String name;
-  final String email;
-  final String password;
-  final String passwordConfirmation;
-
-  RemoteAddAccountParams(
-      {@required this.email,
-      @required this.password,
-      @required this.passwordConfirmation,
-      @required this.name});
-
-  factory RemoteAddAccountParams.fromDomain(AddAccountParams params) =>
-      RemoteAddAccountParams(
-          name: params.name,
-          email: params.email,
-          password: params.password,
-          passwordConfirmation: params.passwordConfirmation);
-
-  Map toJson() => {
-        'name': name,
-        'email': email,
-        'password': password,
-        'passwordConfirmation': passwordConfirmation
-      };
-}
 
 class HttpClientSpy extends Mock implements HttpClient {}
 
@@ -83,7 +33,6 @@ void main() {
   }
 
   setUp(() {
-    sut = RemoteAddAccount(url: url, httpClient: httpClientSpy);
     httpClientSpy = HttpClientSpy();
     url = faker.internet.httpUrl();
     method = 'post';
@@ -93,6 +42,7 @@ void main() {
         name: faker.person.name(),
         password: password,
         passwordConfirmation: password);
+    sut = RemoteAddAccount(url: url, httpClient: httpClientSpy);
 
     mockHttpData(mockValidData());
   });
