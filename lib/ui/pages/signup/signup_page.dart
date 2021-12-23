@@ -2,16 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_app/ui/components/components.dart';
 import 'package:flutter_clean_app/ui/helpers/helpers.dart';
 
-import 'package:provider/provider.dart';
-
 import 'components/components.dart';
-import 'signup_presenter.dart';
 
 class SignupPage extends StatelessWidget {
-  final SignupPresenter presenter;
-
-  const SignupPage(this.presenter);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,31 +17,33 @@ class SignupPage extends StatelessWidget {
                 children: [
                   LoginHeader(),
                   Text(
-                    R.strings.login,
+                    R.strings.addAccount,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   Padding(
                     padding: EdgeInsets.all(24),
-                    child: Provider(
-                      create: (context) => presenter,
-                      child: Form(
-                        child: Column(
-                          children: [
-                            EmailInput(),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8, bottom: 32.0),
-                              child: PasswordInput(),
-                            ),
-                            LoginButton(),
-                            FlatButton.icon(
-                              onPressed: () {},
-                              icon: Icon(Icons.person),
-                              label: Text(R.strings.addAccount),
-                            )
-                          ],
-                        ),
+                    child: Form(
+                      child: Column(
+                        children: [
+                          NameInput(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: EmailInput(),
+                          ),
+                          PasswordInput(),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 8, bottom: 32.0),
+                            child: PasswordConfirmationInput(),
+                          ),
+                          SignupButton(),
+                          FlatButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.exit_to_app),
+                            label: Text(R.strings.login),
+                          )
+                        ],
                       ),
                     ),
                   )

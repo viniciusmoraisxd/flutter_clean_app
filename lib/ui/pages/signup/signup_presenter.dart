@@ -1,1 +1,4 @@
-abstract class SignupPresenter {}
+
+abstract class SignupPresenter {
+
+}

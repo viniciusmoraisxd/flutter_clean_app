@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_app/ui/helpers/helpers.dart';
 
-class PasswordInput extends StatelessWidget {
+class NameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: true,
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
-        labelText: R.strings.password,
+        labelText: R.strings.name,
         icon: Icon(
-          Icons.lock,
+          Icons.person,
           color: Theme.of(context).primaryColorLight,
         ),
       ),
