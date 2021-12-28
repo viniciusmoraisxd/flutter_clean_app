@@ -2,6 +2,9 @@ import 'package:flutter_clean_app/ui/helpers/i18n/strings/translations.dart';
 
 class PtBr implements Translations {
   @override
+  String get msgEmailInUse => "O e-mail já está em uso.";
+
+  @override
   String get msgInvalidCredentials => "Credenciais inválidas.";
 
   @override
