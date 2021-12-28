@@ -207,8 +207,9 @@ void main() {
     isFormValidController.add(true);
 
     await tester.pump();
-    await tester.tap(find.byType(RaisedButton));
-    await tester.pump();
+    final button = find.byType(RaisedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
 
     verify(presenter.auth()).called(1);
   });
