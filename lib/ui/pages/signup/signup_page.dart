@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_app/ui/components/components.dart';
 import 'package:flutter_clean_app/ui/helpers/helpers.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'components/components.dart';
@@ -37,7 +38,11 @@ class SignupPage extends StatelessWidget {
             }
           });
 
-          
+          presenter.navigateToStream.listen((page) {
+            if (page?.isNotEmpty == true) {
+              Get.offAllNamed(page);
+            }
+          });
           return GestureDetector(
             onTap: _hideKeyboard,
             child: SingleChildScrollView(
