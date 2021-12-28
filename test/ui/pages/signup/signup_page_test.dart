@@ -88,7 +88,7 @@ void main() {
     expect(passwordTextChildren, findsOneWidget);
 
     final passwordConfirmationTextChildren = find.descendant(
-        of: find.bySemanticsLabel("Confirmar Senha"),
+        of: find.bySemanticsLabel("Confirmar senha"),
         matching: find.byType(Text));
 
     expect(passwordConfirmationTextChildren, findsOneWidget);
@@ -115,7 +115,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Senha'), password);
     verify(presenter.validatePassword(password));
 
-    await tester.enterText(find.bySemanticsLabel('Confirmar Senha'), password);
+    await tester.enterText(find.bySemanticsLabel('Confirmar senha'), password);
     verify(presenter.validatePasswordConfirmation(password));
   });
 
@@ -134,7 +134,7 @@ void main() {
     await tester.pump();
     expect(
         find.descendant(
-            of: find.bySemanticsLabel("E-mail"), matching: find.byType(Text)),
+            of: find.bySemanticsLabel("Nome"), matching: find.byType(Text)),
         findsOneWidget);
   });
 
@@ -154,6 +154,46 @@ void main() {
     expect(
         find.descendant(
             of: find.bySemanticsLabel("E-mail"), matching: find.byType(Text)),
+        findsOneWidget);
+  });
+
+  testWidgets("Should present password error", (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo inválido.'), findsOneWidget);
+
+    passwordErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatório.'), findsOneWidget);
+
+    passwordErrorController.add(null);
+    await tester.pump();
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel("Senha"), matching: find.byType(Text)),
+        findsOneWidget);
+  });
+
+  testWidgets("Should present password confirmation error",
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordConfirmationErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo inválido.'), findsOneWidget);
+
+    passwordConfirmationErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatório.'), findsOneWidget);
+
+    passwordConfirmationErrorController.add(null);
+    await tester.pump();
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel("Confirmar senha"),
+            matching: find.byType(Text)),
         findsOneWidget);
   });
 }

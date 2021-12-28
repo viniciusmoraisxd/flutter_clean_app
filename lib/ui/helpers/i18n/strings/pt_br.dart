@@ -18,7 +18,7 @@ class PtBr implements Translations {
   String get addAccount => 'Criar conta';
 
   @override
-  String get confirmPassword => "Confirmar Senha";
+  String get confirmPassword => "Confirmar senha";
 
   @override
   String get email => "E-mail";
