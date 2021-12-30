@@ -1,4 +1,6 @@
+import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:flutter_clean_app/domain/usecases/add_account.dart';
+import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 import 'package:flutter_clean_app/ui/helpers/errors/ui_error.dart';
 import 'package:get/get.dart';
@@ -7,8 +9,13 @@ import 'package:meta/meta.dart';
 class GetxSignupPresenter extends GetxController {
   final Validation validation;
   final AddAccount addAccount;
+  final SaveCurrentAccount saveCurrentAccount;
 
-  GetxSignupPresenter({@required this.addAccount, @required this.validation});
+  GetxSignupPresenter({
+    @required this.addAccount,
+    @required this.validation,
+    @required this.saveCurrentAccount,
+  });
 
   String _name;
   String _email;
@@ -19,14 +26,18 @@ class GetxSignupPresenter extends GetxController {
   var _emailError = Rx<UIError>();
   var _passwordError = Rx<UIError>();
   var _passwordConfirmationError = Rx<UIError>();
+  var _mainError = Rx<UIError>();
   var _isFormValid = false.obs;
+  var _isLoading = false.obs;
 
   Stream<UIError> get nameErrorStream => _nameError.stream;
   Stream<UIError> get emailErrorStream => _emailError.stream;
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
   Stream<UIError> get passwordConfirmationErrorStream =>
       _passwordConfirmationError.stream;
+  Stream<UIError> get mainErrorStream => _mainError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   void validateName(String name) {
     _name = name;
@@ -84,10 +95,19 @@ class GetxSignupPresenter extends GetxController {
   }
 
   Future<void> signup() async {
-    await addAccount.add(AddAccountParams(
-        name: _name,
-        email: _email,
-        password: _password,
-        passwordConfirmation: _passwordConfirmation));
+    try {
+      _isLoading.value = true;
+
+      final account = await addAccount.add(AddAccountParams(
+          name: _name,
+          email: _email,
+          password: _password,
+          passwordConfirmation: _passwordConfirmation));
+
+      await saveCurrentAccount.save(account);
+    } on DomainError {
+      _mainError.value = UIError.unexpected;
+    }
+    _isLoading.value = false;
   }
 }
