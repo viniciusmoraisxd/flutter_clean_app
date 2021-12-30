@@ -1,3 +1,4 @@
+import 'package:flutter_clean_app/domain/usecases/add_account.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 import 'package:flutter_clean_app/ui/helpers/errors/ui_error.dart';
 import 'package:get/get.dart';
@@ -5,8 +6,10 @@ import 'package:meta/meta.dart';
 
 class GetxSignupPresenter extends GetxController {
   final Validation validation;
+  final AddAccount addAccount;
 
-  GetxSignupPresenter({@required this.validation});
+  GetxSignupPresenter({@required this.addAccount, @required this.validation});
+
   String _name;
   String _email;
   String _password;
@@ -78,5 +81,13 @@ class GetxSignupPresenter extends GetxController {
         _email != null &&
         _password != null &&
         _passwordConfirmation != null;
+  }
+
+  Future<void> signup() async {
+    await addAccount.add(AddAccountParams(
+        name: _name,
+        email: _email,
+        password: _password,
+        passwordConfirmation: _passwordConfirmation));
   }
 }

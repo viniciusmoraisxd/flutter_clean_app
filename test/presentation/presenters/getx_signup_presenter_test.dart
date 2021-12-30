@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_clean_app/domain/usecases/add_account.dart';
 import 'package:flutter_clean_app/presentation/presenters/presenters.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 import 'package:flutter_clean_app/ui/helpers/errors/errors.dart';
@@ -7,8 +8,11 @@ import 'package:test/test.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
+class AddAccountSpy extends Mock implements AddAccount {}
+
 void main() {
   ValidationSpy validation;
+  AddAccountSpy addAccount;
   GetxSignupPresenter sut;
   String name;
   String email;
@@ -25,7 +29,8 @@ void main() {
 
   setUp(() {
     validation = ValidationSpy();
-    sut = GetxSignupPresenter(validation: validation);
+    addAccount = AddAccountSpy();
+    sut = GetxSignupPresenter(validation: validation, addAccount: addAccount);
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
@@ -216,5 +221,24 @@ void main() {
     sut.validatePassword(password);
     await Future.delayed(Duration.zero);
     sut.validatePasswordConfirmation(passwordConfirmation);
+  });
+
+  test('Should call AddAccount with correct values', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    await sut.signup();
+
+    verify(
+      addAccount.add(
+        AddAccountParams(
+            name: name,
+            email: email,
+            password: password,
+            passwordConfirmation: passwordConfirmation),
+      ),
+    ).called(1);
   });
 }
