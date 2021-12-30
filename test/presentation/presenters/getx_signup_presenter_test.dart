@@ -12,6 +12,7 @@ void main() {
   GetxSignupPresenter sut;
   String name;
   String email;
+  String password;
   PostExpectation mockValidationCall({String field}) =>
       when(validation.validate(
           field: field == null ? anyNamed('field') : field,
@@ -26,6 +27,7 @@ void main() {
     sut = GetxSignupPresenter(validation: validation);
     name = faker.person.name();
     email = faker.internet.email();
+    password = faker.internet.password();
 
     mockValidation(); //success validation
   });
@@ -112,5 +114,48 @@ void main() {
 
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('Should call validation with correct password', () {
+    sut.validatePassword(password);
+
+    verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+
+  test('Should emit invalid field if password is invalid', () {
+    mockValidation(value: ValidationError.invalidField);
+
+    //garante que só vai emitir quando houver ação diferente da anterior
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+  });
+
+  test('Should emit required field error if password is empty', () {
+    mockValidation(value: ValidationError.requiredField);
+
+    //garante que só vai emitir quando houver ação diferente da anterior
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+  });
+
+  test('Should emit null if password validation succeds', () {
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, null)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
   });
 }
