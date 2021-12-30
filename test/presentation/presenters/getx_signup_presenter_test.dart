@@ -10,6 +10,7 @@ class ValidationSpy extends Mock implements Validation {}
 void main() {
   ValidationSpy validation;
   GetxSignupPresenter sut;
+  String name;
   String email;
   PostExpectation mockValidationCall({String field}) =>
       when(validation.validate(
@@ -23,9 +24,52 @@ void main() {
   setUp(() {
     validation = ValidationSpy();
     sut = GetxSignupPresenter(validation: validation);
+    name = faker.person.name();
     email = faker.internet.email();
 
     mockValidation(); //success validation
+  });
+
+  test('Should call validation with correct name', () {
+    sut.validateName(name);
+
+    verify(validation.validate(field: 'name', value: name)).called(1);
+  });
+
+  test('Should emit invalid field if name is invalid', () {
+    mockValidation(value: ValidationError.invalidField);
+
+    //garante que só vai emitir quando houver ação diferente da anterior
+    sut.nameErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateName(name);
+  });
+
+  test('Should emit required field error if name is empty', () {
+    mockValidation(value: ValidationError.requiredField);
+
+    //garante que só vai emitir quando houver ação diferente da anterior
+    sut.nameErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateName(name);
+  });
+
+  test('Should emit null if name validation succeds', () {
+    sut.nameErrorStream.listen(expectAsync1((error) => expect(error, null)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateName(name);
+    sut.validateName(name);
   });
 
   test('Should call validation with correct email', () {
