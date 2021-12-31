@@ -330,4 +330,16 @@ void main() {
 
     await sut.signup();
   });
+
+  test('Should change page on AddAccount success', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, '/surveys')));
+
+    await sut.signup();
+  });
 }
