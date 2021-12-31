@@ -88,6 +88,9 @@ class StreamLoginPresenter implements LoginPresenter {
     _controller.close();
     _controller = null;
   }
+
+  @override
+  void goToSignup() {}
 }
 
 class LoginState {

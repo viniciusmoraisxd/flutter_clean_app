@@ -49,7 +49,6 @@ void main() {
   }
 
   setUp(() {
-    print('teste');
     validation = ValidationSpy();
     saveCurrentAccount = SaveCurrentAccountSpy();
     authentication = AuthenticationSpy();
@@ -85,8 +84,6 @@ void main() {
   });
 
   test('Should emit required field error if email is empty', () {
-
-   
     mockValidation(value: ValidationError.requiredField);
 
     //garante que só vai emitir quando houver ação diferente da anterior
@@ -233,5 +230,11 @@ void main() {
         .listen(expectAsync1((page) => expect(page, '/surveys')));
 
     await sut.auth();
+  });
+
+  test('Should go to SignupPage on link click', () async {
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, '/signup')));
+    sut.goToSignup();
   });
 }
