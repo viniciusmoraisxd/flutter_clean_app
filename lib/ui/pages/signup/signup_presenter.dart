@@ -15,4 +15,5 @@ abstract class SignupPresenter {
   void validatePassword(String password);
   void validatePasswordConfirmation(String passwordConfirmation);
   Future<void> signup();
+  void goToLogin();
 }

@@ -3,10 +3,11 @@ import 'package:flutter_clean_app/domain/usecases/add_account.dart';
 import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 import 'package:flutter_clean_app/ui/helpers/errors/ui_error.dart';
+import 'package:flutter_clean_app/ui/pages/pages.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-class GetxSignupPresenter extends GetxController {
+class GetxSignupPresenter extends GetxController implements SignupPresenter {
   final Validation validation;
   final AddAccount addAccount;
   final SaveCurrentAccount saveCurrentAccount;
@@ -120,5 +121,9 @@ class GetxSignupPresenter extends GetxController {
       }
       _isLoading.value = false;
     }
+  }
+
+  void goToLogin() {
+    _navigateTo.value = '/login';
   }
 }
