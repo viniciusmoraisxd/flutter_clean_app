@@ -68,7 +68,7 @@ void main() {
     final formData = {'email': email, 'password': null};
 
     sut.validateEmail(email);
-    
+
     verify(validation.validate(field: 'email', input: formData)).called(1);
   });
 
@@ -109,7 +109,7 @@ void main() {
   });
 
   test('Should call validation with correct password', () {
-        final formData = {'email': null, 'password': password};
+    final formData = {'email': null, 'password': password};
 
     sut.validatePassword(password);
 
@@ -187,8 +187,7 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream
-        .listen(expectAsync1((error) => expect(error, UIError.unexpected)));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.auth();
   });
@@ -197,6 +196,7 @@ void main() {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
+    expectLater(sut.mainErrorStream, emits(null));
     expectLater(sut.isLoadingStream, emits(true));
 
     await sut.auth();
@@ -208,8 +208,8 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(
-        expectAsync1((error) => expect(error, UIError.invalidCredentials)));
+    expectLater(
+        sut.mainErrorStream, emitsInOrder([null, UIError.invalidCredentials]));
 
     await sut.auth();
   });
@@ -220,8 +220,7 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream
-        .listen(expectAsync1((error) => expect(error, UIError.unexpected)));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.auth();
   });
