@@ -229,8 +229,6 @@ void main() {
       expect(future, throwsA(HttpError.badRequest));
     });
  
- 
- 
     test('Should return an UnauthorizedErrod if GET status code 401', () async {
       mockResponse(401);
 
@@ -239,7 +237,14 @@ void main() {
       expect(future, throwsA(HttpError.unauthorized));
     });
  
- 
+     test('Should throws a ForbiddenError GET if status code 403', () async {
+      mockResponse(403);
+
+      final future = sut.request(url: url, method: 'get');
+
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
  
   });
 }
