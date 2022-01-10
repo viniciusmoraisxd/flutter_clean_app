@@ -46,6 +46,10 @@ void main() {
     mockRequest().thenAnswer((_) async => data);
   }
 
+  void mockHttpError(HttpError error) {
+    mockRequest().thenThrow(error);
+  }
+
   List<Map> mockValidData() => [
         {
           'id': faker.guid.guid(),
@@ -101,6 +105,15 @@ void main() {
     mockHttpData([
       {"invalid_key": "invalid_value"}
     ]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw an UnexpectedError if HttpClient returns status code 404',
+      () async {
+    mockHttpError(HttpError.notFound);
 
     final future = sut.load();
 
