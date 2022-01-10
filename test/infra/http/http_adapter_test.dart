@@ -195,5 +195,21 @@ void main() {
 
       expect(response, null);
     });
+
+    test('Should return null if status GET code 204 with data', () async {
+      mockResponse(204);
+
+      final response = await sut.request(url: url, method: 'get');
+
+      expect(response, null);
+    });
+
+    test('Should return null if GET status code 204', () async {
+      mockResponse(204, body: '');
+
+      final response = await sut.request(url: url, method: 'get');
+
+      expect(response, null);
+    });
   });
 }
