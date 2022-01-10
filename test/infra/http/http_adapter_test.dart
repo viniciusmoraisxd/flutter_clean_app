@@ -146,6 +146,7 @@ void main() {
 
       expect(future, throwsA(HttpError.serverError));
     });
+
     test('Should return a ServerError if post throws', () async {
       mockError();
 
@@ -211,9 +212,8 @@ void main() {
 
       expect(response, null);
     });
-  
-  
-   test('Should return a BadRequestError if GET status code 400', () async {
+
+    test('Should return a BadRequestError if GET status code 400', () async {
       mockResponse(400);
 
       final future = sut.request(url: url, method: 'get');
@@ -228,7 +228,7 @@ void main() {
 
       expect(future, throwsA(HttpError.badRequest));
     });
- 
+
     test('Should return an UnauthorizedErrod if GET status code 401', () async {
       mockResponse(401);
 
@@ -236,8 +236,8 @@ void main() {
 
       expect(future, throwsA(HttpError.unauthorized));
     });
- 
-     test('Should throws a ForbiddenError GET if status code 403', () async {
+
+    test('Should throws a ForbiddenError GET if status code 403', () async {
       mockResponse(403);
 
       final future = sut.request(url: url, method: 'get');
@@ -245,7 +245,7 @@ void main() {
       expect(future, throwsA(HttpError.forbidden));
     });
 
-   test('Should throws a NotFoundError if GET status code 404', () async {
+    test('Should throws a NotFoundError if GET status code 404', () async {
       mockResponse(404);
 
       final future = sut.request(url: url, method: 'get');
@@ -253,6 +253,12 @@ void main() {
       expect(future, throwsA(HttpError.notFound));
     });
 
+    test('Should throws a ServerError if status code 500', () async {
+      mockResponse(500);
 
+      final future = sut.request(url: url, method: 'get');
+
+      expect(future, throwsA(HttpError.serverError));
+    });
   });
 }
