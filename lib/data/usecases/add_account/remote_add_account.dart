@@ -6,7 +6,7 @@ import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:meta/meta.dart';
 
 class RemoteAddAccount implements AddAccount {
-  final HttpClient httpClient;
+  final HttpClient<Map> httpClient;
   final String url;
 
   RemoteAddAccount({@required this.url, @required this.httpClient});
