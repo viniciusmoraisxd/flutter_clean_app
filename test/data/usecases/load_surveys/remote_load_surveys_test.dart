@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter_clean_app/data/http/http.dart';
 import 'package:flutter_clean_app/data/models/models.dart';
 import 'package:flutter_clean_app/domain/entities/entities.dart';
+import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:meta/meta.dart';
@@ -13,11 +14,15 @@ class RemoteLoadSurveys {
   RemoteLoadSurveys({@required this.url, @required this.httpClient});
 
   Future<List<SurveyEntity>> load() async {
-    final httpResponse = await httpClient.request(url: url, method: "get");
+    try {
+      final httpResponse = await httpClient.request(url: url, method: "get");
 
-    return httpResponse
-        .map((json) => RemoteSurveyModel.fromJson(json).toEntity())
-        .toList();
+      return httpResponse
+          .map((json) => RemoteSurveyModel.fromJson(json).toEntity())
+          .toList();
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -87,6 +92,18 @@ void main() {
         didAnswer: list[1]['didAnswer'],
       )
     ]);
+
     verify(httpClient.request(url: url, method: "get"));
+  });
+
+  test('Should return an UnexpectedError on success and data is invalid',
+      () async {
+    mockHttpData([
+      {"invalid_key": "invalid_value"}
+    ]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
