@@ -181,5 +181,19 @@ void main() {
         ),
       );
     });
+
+    test('Should return a data if GET status code 200', () async {
+      final response = await sut.request(url: url, method: 'get');
+
+      expect(response, {'any_key': 'any_value'});
+    });
+
+    test('Should return null if GET status code 200 without data', () async {
+      mockResponse(200, body: '');
+
+      final response = await sut.request(url: url, method: 'get');
+
+      expect(response, null);
+    });
   });
 }
