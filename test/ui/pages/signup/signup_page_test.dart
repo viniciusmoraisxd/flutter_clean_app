@@ -234,27 +234,26 @@ void main() {
     verify(presenter.signup()).called(1);
   });
 
-  testWidgets("Should present loading on form submit",
-      (WidgetTester tester) async {
+testWidgets("Should handle loading correctly", (WidgetTester tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-  });
-
-  testWidgets("Should hide loading on form submit end",
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    isLoadingController.add(true);
-    await tester.pump();
 
     isLoadingController.add(false);
     await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
 
+    isLoadingController.add(true);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    isLoadingController.add(null);
+    await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
+
 
   testWidgets("Should present a message if Signup fails",
       (WidgetTester tester) async {
