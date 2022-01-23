@@ -112,4 +112,15 @@ void main() {
     expect(find.text('Date 1'), findsWidgets);
     expect(find.text('Date 2'), findsWidgets);
   });
+
+  testWidgets('Should call LoadSurveys on reload button click',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadSurveysController.addError(UIError.unexpected.description);
+    await tester.pump();
+    await tester.tap(find.text('Recarregar'));
+
+    verify(presenter.loadData()).called(2);
+  });
 }
