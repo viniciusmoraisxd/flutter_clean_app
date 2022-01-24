@@ -7,7 +7,7 @@ import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-class HttpClientSpy extends Mock implements HttpClient<Map> {}
+class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   HttpClientSpy httpClientSpy;

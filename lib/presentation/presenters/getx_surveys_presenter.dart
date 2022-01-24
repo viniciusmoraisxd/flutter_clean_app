@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
-class GetxSurveysPresenter {
+class GetxSurveysPresenter implements SurveysPresenter {
   final LoadSurveys loadSurveys;
   final _isLoading = true.obs;
   final _surveys = Rx<List<SurveysViewModel>>();

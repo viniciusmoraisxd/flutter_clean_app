@@ -6,7 +6,7 @@ import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-class HttpClientSpy extends Mock implements HttpClient<List<Map>> {}
+class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   String url;
