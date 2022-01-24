@@ -4,4 +4,4 @@ import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:flutter_clean_app/main/factories/factories.dart';
 
 LoadSurveys makeRemoteLoadSurveys() => RemoteLoadSurveys(
-    httpClient: makeHttpAdapter(), url: makeApiUrl('surveys'));
+    httpClient: makeAuthorizeHttpClientDecorator(), url: makeApiUrl('surveys'));
