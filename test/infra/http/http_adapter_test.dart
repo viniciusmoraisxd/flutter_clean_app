@@ -25,7 +25,7 @@ void main() {
       expect(future, throwsA(HttpError.serverError));
     });
   });
- 
+
   group('Post Tests', () {
     PostExpectation mockRequest() => when(
         client.post(any, headers: anyNamed('headers'), body: anyNamed('body')));
@@ -53,6 +53,24 @@ void main() {
           headers: {
             'content-type': 'application/json',
             'accept': 'application/json'
+          },
+          body: '{"any_key":"any_value"}',
+        ),
+      );
+
+      await sut.request(
+          url: url,
+          method: 'post',
+          body: {'any_key': 'any_value'},
+          headers: {'any_header': 'any_value'});
+
+      verify(
+        client.post(
+          url,
+          headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json',
+            'any_header': 'any_value'
           },
           body: '{"any_key":"any_value"}',
         ),
@@ -176,13 +194,25 @@ void main() {
 
     test('Should call GET with correct values', () async {
       await sut.request(url: url, method: 'get');
-
       verify(
         client.get(
           url,
           headers: {
             'content-type': 'application/json',
             'accept': 'application/json'
+          },
+        ),
+      );
+
+      await sut.request(
+          url: url, method: 'get', headers: {'any_header': 'any_value'});
+      verify(
+        client.get(
+          url,
+          headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json',
+            'any_header': 'any_value'
           },
         ),
       );

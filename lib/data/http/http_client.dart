@@ -5,5 +5,6 @@ abstract class HttpClient {
     @required String url,
     @required method,
     Map body,
+    Map headers,
   });
 }
