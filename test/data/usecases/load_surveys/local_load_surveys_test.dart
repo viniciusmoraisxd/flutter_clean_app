@@ -12,9 +12,9 @@ class LocalLoadSurveys {
   LocalLoadSurveys({@required this.fetchCacheStorage});
 
   Future<List<SurveyEntity>> load() async {
-    final data = await fetchCacheStorage.fetch('surveys');
-
     try {
+      final data = await fetchCacheStorage.fetch('surveys');
+
       if (data?.isEmpty != false) {
         throw Exception();
       }
@@ -54,10 +54,14 @@ void main() {
         }
       ];
 
+  PostExpectation mockFetchCall() => when(fetchCacheStorageSpy.fetch(any));
+
   void mockFetch(List<Map> list) {
     data = list;
-    when(fetchCacheStorageSpy.fetch(any)).thenAnswer((_) async => data);
+    mockFetchCall().thenAnswer((_) async => data);
   }
+
+  void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
   setUp(() {
     fetchCacheStorageSpy = FetchCacheStorageSpy();
@@ -127,6 +131,14 @@ void main() {
         'didAnswer': 'false',
       }
     ]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if cache throws', () async {
+    mockFetchError();
 
     final future = sut.load();
 
