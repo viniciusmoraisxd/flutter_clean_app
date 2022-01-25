@@ -6,7 +6,7 @@ class LocalLoadSurveys {
   final FetchCacheStorage fetchCacheStorage;
 
   LocalLoadSurveys({@required this.fetchCacheStorage});
-  
+
   Future<void> load() async {
     await fetchCacheStorage.fetch('surveys');
   }
@@ -19,10 +19,15 @@ abstract class FetchCacheStorage {
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {}
 
 void main() {
-  test('Should calll FetchCacheStorage with correct key', () async {
-    final fetchCacheStorageSpy = FetchCacheStorageSpy();
-    final sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorageSpy);
+  FetchCacheStorageSpy fetchCacheStorageSpy;
+  LocalLoadSurveys sut;
 
+  setUp(() {
+    fetchCacheStorageSpy = FetchCacheStorageSpy();
+    sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorageSpy);
+  });
+
+  test('Should calll FetchCacheStorage with correct key', () async {
     await sut.load();
 
     verify(fetchCacheStorageSpy.fetch('surveys')).called(1);
