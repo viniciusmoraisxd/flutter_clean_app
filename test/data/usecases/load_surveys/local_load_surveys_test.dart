@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_clean_app/data/models/models.dart';
 import 'package:flutter_clean_app/domain/entities/entities.dart';
+import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:meta/meta.dart';
@@ -12,6 +13,10 @@ class LocalLoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
     final data = await fetchCacheStorage.fetch('surveys');
+
+    if (data.isEmpty) {
+      throw DomainError.unexpected;
+    }
 
     return data
         .map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity())
@@ -77,5 +82,13 @@ void main() {
           date: DateTime.utc(2022, 2, 24),
           didAnswer: true),
     ]);
+  });
+
+  test('Should throw UnexpectedError if cache is empty', () async {
+    mockFetch([]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
