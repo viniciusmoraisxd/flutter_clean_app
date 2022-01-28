@@ -66,8 +66,11 @@ void main() {
   group("Fetch", () {
     String result;
 
-    void mockFetch() =>
-        when(localStorageSpy.getItem(any)).thenAnswer((_) => result);
+    PostExpectation mockFetchCall() => when(localStorageSpy.getItem(any));
+
+    void mockFetch() => mockFetchCall().thenAnswer((_) => result);
+
+    void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
     setUp(() {
       mockFetch();
@@ -83,6 +86,13 @@ void main() {
       final data = await sut.fetch(key);
 
       expect(data, result);
+    });
+
+    test('Should throw if LocalStorageAdapter.fetch fails', () async {
+      mockFetchError();
+      final future = sut.fetch(key);
+
+      expect(future, throwsA(isA<Exception>()));
     });
   });
 }
