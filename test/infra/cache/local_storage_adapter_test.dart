@@ -17,12 +17,19 @@ class LocalStorageAdapter {
 class LocalStorageSpy extends Mock implements LocalStorage {}
 
 void main() {
-  test('Should call localStorage with correct values', () async {
-    final localStorageSpy = LocalStorageSpy();
-    final sut = LocalStorageAdapter(localStorage: localStorageSpy);
-    final key = faker.randomGenerator.string(5);
-    final value = faker.randomGenerator.string(50);
+  LocalStorageSpy localStorageSpy;
+  LocalStorageAdapter sut;
+  String key;
+  dynamic value;
 
+  setUp(() {
+    localStorageSpy = LocalStorageSpy();
+    sut = LocalStorageAdapter(localStorage: localStorageSpy);
+    key = faker.randomGenerator.string(5);
+    value = faker.randomGenerator.string(50);
+  });
+
+  test('Should call localStorage with correct values', () async {
     await sut.save(key: key, value: value);
 
     verify(localStorageSpy.setItem(key, value)).called(1);
