@@ -54,5 +54,12 @@ void main() {
 
       verify(localStorageSpy.deleteItem(key)).called(1);
     });
+
+    test('Should throw if LocalStorageAdapter.delete fails', () async {
+      mockDeleteError();
+      final future = sut.delete(key);
+
+      expect(future, throwsA(isA<Exception>()));
+    });
   });
 }
