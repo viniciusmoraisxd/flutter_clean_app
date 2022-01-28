@@ -12,9 +12,10 @@ void main() {
   String key;
   dynamic value;
 
-  void mockDeleteItemError() =>
+  void mockDeleteError() =>
       when(localStorageSpy.deleteItem(any)).thenThrow(Exception());
-  void mockSetItemError() =>
+
+  void mockSaveError() =>
       when(localStorageSpy.setItem(any, any)).thenThrow(Exception());
 
   setUp(() {
@@ -32,14 +33,14 @@ void main() {
   });
 
   test('Should throw if DeleteItem fails', () async {
-    mockDeleteItemError();
+    mockDeleteError();
     final future = sut.save(key: key, value: value);
 
     expect(future, throwsA(isA<Exception>()));
   });
 
   test('Should throw if SaveItem fails', () async {
-    mockSetItemError();
+    mockSaveError();
     final future = sut.save(key: key, value: value);
 
     expect(future, throwsA(isA<Exception>()));
