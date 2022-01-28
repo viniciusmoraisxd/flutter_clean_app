@@ -25,6 +25,8 @@ void main() {
 
   void mockDeleteItemError() =>
       when(localStorageSpy.deleteItem(any)).thenThrow(Exception());
+  void mockSetItemError() =>
+      when(localStorageSpy.setItem(any, any)).thenThrow(Exception());
 
   setUp(() {
     localStorageSpy = LocalStorageSpy();
@@ -42,6 +44,13 @@ void main() {
 
   test('Should throw if DeleteItem fails', () async {
     mockDeleteItemError();
+    final future = sut.save(key: key, value: value);
+
+    expect(future, throwsA(isA<Exception>()));
+  });
+
+  test('Should throw if SaveItem fails', () async {
+    mockSetItemError();
     final future = sut.save(key: key, value: value);
 
     expect(future, throwsA(isA<Exception>()));
