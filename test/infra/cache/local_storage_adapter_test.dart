@@ -48,8 +48,8 @@ void main() {
     });
   });
 
-  group("Save", () {
-    test('Should call localStorage with correct values', () async {
+  group("Delete", () {
+    test('Should call localStorage.delete with correct values', () async {
       await sut.delete(key);
 
       verify(localStorageSpy.deleteItem(key)).called(1);
@@ -64,10 +64,25 @@ void main() {
   });
 
   group("Fetch", () {
+    String result;
+
+    void mockFetch() =>
+        when(localStorageSpy.getItem(any)).thenAnswer((_) => result);
+
+    setUp(() {
+      mockFetch();
+    });
+
     test('Should call localStorage.fetch with correct value', () async {
       await sut.fetch(key);
 
       verify(localStorageSpy.getItem(key)).called(1);
+    });
+
+    test('Should return same value as localStorage', () async {
+      final data = await sut.fetch(key);
+
+      expect(data, result);
     });
   });
 }
