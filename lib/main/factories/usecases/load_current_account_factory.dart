@@ -3,4 +3,4 @@ import 'package:flutter_clean_app/domain/usecases/usecases.dart';
 import 'package:flutter_clean_app/main/factories/cache/cache.dart';
 
 LoadCurrentAccount makeLocalLoadCurrentAccount() =>
-    LocalLoadCurrentAccount(fetchSecureCacheStorage: makeLocalStorageAdapter());
+    LocalLoadCurrentAccount(fetchSecureCacheStorage: makeSecureStorageAdapter());
