@@ -23,6 +23,9 @@ void main() {
   String key;
   dynamic value;
 
+  void mockDeleteItemError() =>
+      when(localStorageSpy.deleteItem(any)).thenThrow(Exception());
+
   setUp(() {
     localStorageSpy = LocalStorageSpy();
     sut = LocalStorageAdapter(localStorage: localStorageSpy);
@@ -35,5 +38,12 @@ void main() {
 
     verify(localStorageSpy.deleteItem(key)).called(1);
     verify(localStorageSpy.setItem(key, value)).called(1);
+  });
+
+  test('Should throw if DeleteItem fails', () async {
+    mockDeleteItemError();
+    final future = sut.save(key: key, value: value);
+
+    expect(future, throwsA(isA<Exception>()));
   });
 }
