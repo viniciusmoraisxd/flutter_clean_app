@@ -140,6 +140,7 @@ void main() {
         ];
 
     PostExpectation mockFetchCall() => when(cacheStorageSpy.fetch(any));
+    void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
     void mockFetch(List<Map> list) {
       data = list;
@@ -175,6 +176,14 @@ void main() {
           'didAnswer': 'false',
         },
       ]);
+
+      await sut.validate();
+
+      verify(cacheStorageSpy.delete('surveys')).called(1);
+    });
+
+    test('Should delete cache if data is incomplete', () async {
+      mockFetchError();
 
       await sut.validate();
 
