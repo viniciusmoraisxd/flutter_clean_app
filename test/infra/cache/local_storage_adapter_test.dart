@@ -48,5 +48,11 @@ void main() {
     });
   });
 
+  group("Save", () {
+    test('Should call localStorage with correct values', () async {
+      await sut.delete(key);
 
+      verify(localStorageSpy.deleteItem(key)).called(1);
+    });
+  });
 }
