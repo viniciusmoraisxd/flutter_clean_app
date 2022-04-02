@@ -2,7 +2,7 @@ import 'package:flutter_clean_app/data/cache/cache.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:meta/meta.dart';
 
-class LocalStorageAdapter implements CacheStorage{
+class LocalStorageAdapter implements CacheStorage {
   final LocalStorage localStorage;
 
   LocalStorageAdapter({@required this.localStorage});
@@ -17,6 +17,6 @@ class LocalStorageAdapter implements CacheStorage{
   }
 
   Future<dynamic> fetch(String key) async {
-    await localStorage.getItem(key);
+    return await localStorage.getItem(key);
   }
 }
