@@ -1,6 +1,6 @@
 import 'package:flutter_clean_app/main/builders/builders.dart';
+import 'package:flutter_clean_app/main/composites/composites.dart';
 import 'package:flutter_clean_app/validation/protocols/protocols.dart';
-import 'package:flutter_clean_app/validation/validators/validators.dart';
 
 ValidationComposite makeSignupValidation() =>
     ValidationComposite(makeSignupValidations());

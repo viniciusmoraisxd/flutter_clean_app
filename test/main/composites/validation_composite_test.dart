@@ -1,6 +1,6 @@
+import 'package:flutter_clean_app/main/composites/composites.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 import 'package:flutter_clean_app/validation/protocols/field_validation.dart';
-import 'package:flutter_clean_app/validation/validators/validators.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
