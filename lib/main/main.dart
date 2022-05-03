@@ -20,7 +20,7 @@ class App extends StatelessWidget {
       title: 'Flutter - TDD, Clean Arch and SOLID',
       debugShowCheckedModeBanner: false,
       theme: appTheme(),
-      initialRoute: '/survey_result/3',
+      initialRoute: '/login',
       getPages: [
         GetPage(name: '/', page: makeSplashPage, transition: Transition.fade),
         GetPage(
