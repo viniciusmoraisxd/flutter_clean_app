@@ -8,10 +8,14 @@ import 'package:mockito/mockito.dart';
 class FetchSecureCacheStorageSpy extends Mock
     implements FetchSecureCacheStorage {}
 
+class DeleteSecureCacheStorageSpy extends Mock
+    implements DeleteSecureCacheStorage {}
+
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   FetchSecureCacheStorageSpy fetchSecureCacheStorageSpy;
+  DeleteSecureCacheStorageSpy deleteSecureCacheStorageSpy;
   HttpClientSpy httpClientSpy;
   AuthorizeHttpClientDecorator sut;
   String url;
@@ -53,8 +57,10 @@ void main() {
   setUp(() {
     httpClientSpy = HttpClientSpy();
     fetchSecureCacheStorageSpy = FetchSecureCacheStorageSpy();
+    deleteSecureCacheStorageSpy = DeleteSecureCacheStorageSpy();
     sut = AuthorizeHttpClientDecorator(
         fetchSecureCacheStorage: fetchSecureCacheStorageSpy,
+        deleteSecureCacheStorage: deleteSecureCacheStorageSpy,
         decoratee: httpClientSpy);
 
     url = faker.internet.httpUrl();
@@ -105,6 +111,7 @@ void main() {
     final future = sut.request(url: url, method: method, body: body);
 
     expect(future, throwsA(HttpError.forbidden));
+    verify(deleteSecureCacheStorageSpy.deleteSecure('token')).called(1);
   });
 
   test('Should rethrow if decoratee throws', () async {
