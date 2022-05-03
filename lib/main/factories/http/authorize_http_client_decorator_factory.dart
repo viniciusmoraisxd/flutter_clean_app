@@ -4,4 +4,5 @@ import 'package:flutter_clean_app/main/factories/factories.dart';
 
 HttpClient makeAuthorizeHttpClientDecorator() => AuthorizeHttpClientDecorator(
     decoratee: makeHttpAdapter(),
-    fetchSecureCacheStorage: makeSecureStorageAdapter());
+    fetchSecureCacheStorage: makeSecureStorageAdapter(),
+    deleteSecureCacheStorage: makeSecureStorageAdapter());

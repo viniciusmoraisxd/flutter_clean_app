@@ -25,12 +25,12 @@ void main() {
     await sut.save(account);
 
     verify(
-        saveSecureCacheStorage.saveSecure(key: 'token', value: account.token));
+        saveSecureCacheStorage.save(key: 'token', value: account.token));
   });
 
   test('Should throws Unexpected if SaveSecureCacheStorage Throws', () async {
     when(
-      saveSecureCacheStorage.saveSecure(
+      saveSecureCacheStorage.save(
         key: anyNamed('key'),
         value: anyNamed('value'),
       ),

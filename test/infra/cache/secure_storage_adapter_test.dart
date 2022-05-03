@@ -21,16 +21,19 @@ void main() {
   });
 
   group('Save Secure', () {
+    void mockSaveSecureError() => when(
+            secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
+        .thenThrow(Exception());
+
     test('Should call save secure with correct values', () async {
-      await sut.saveSecure(key: key, value: value);
+      await sut.save(key: key, value: value);
 
       verify(secureStorage.write(key: key, value: value));
     });
     test('Should throws if save secure throws', () async {
-      when(sut.saveSecure(key: anyNamed('key'), value: anyNamed('value')))
-          .thenThrow(Exception());
+      mockSaveSecureError();
 
-      final future = sut.saveSecure(key: key, value: value);
+      final future = sut.save(key: key, value: value);
 
       expect(future, throwsA(TypeMatcher<Exception>()));
     });
@@ -46,24 +49,41 @@ void main() {
       mockFetchSecure();
     });
 
-    test('Should call fetchSecure with correct values', () async {
-      await sut.fetchSecure(key);
+    test('Should call fetch with correct values', () async {
+      await sut.fetch(key);
 
       verify(secureStorage.read(key: key));
     });
 
     test('Should return correct value on success', () async {
-      final fetchedValue = await sut.fetchSecure(key);
+      final fetchedValue = await sut.fetch(key);
 
       expect(fetchedValue, value);
     });
 
-    test('Should throws if fetchSecure throws', () async {
+    test('Should throws if fetch throws', () async {
       when(secureStorage.read(key: anyNamed('key'))).thenThrow(Exception());
 
-      final future = sut.fetchSecure(key);
+      final future = sut.fetch(key);
 
       expect(future, throwsA(TypeMatcher<Exception>()));
+    });
+  });
+
+  group("Delete", () {
+    void mockDeleteSecureError() =>
+        when(secureStorage.delete(key: anyNamed('key'))).thenThrow(Exception());
+    test('Should call delete with correct key', () async {
+      await sut.delete(key);
+
+      verify(secureStorage.delete(key: key)).called(1);
+    });
+
+    test('Should throw if delete fails', () async {
+      mockDeleteSecureError();
+      final future = sut.delete(key);
+
+      expect(future, throwsA(isA<Exception>()));
     });
   });
 }
