@@ -1,52 +1,31 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_clean_app/ui/components/components.dart';
 import 'package:flutter_clean_app/ui/helpers/helpers.dart';
 import 'package:flutter_clean_app/ui/pages/pages.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'components/components.dart';
+import '../../mixins/mixins.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatelessWidget
+    with KeyboardManager, LoadingManager, UIErrorManager, NavigateManager {
   final LoginPresenter presenter;
 
   const LoginPage(this.presenter);
 
   @override
   Widget build(BuildContext context) {
-    void _hideKeyboard() {
-      final currentFocus = FocusScope.of(context);
-      print(currentFocus.hasPrimaryFocus);
-      if (!currentFocus.hasPrimaryFocus) {
-        currentFocus.unfocus();
-      }
-    }
-
     return Scaffold(
       body: Builder(
         builder: (context) {
-          presenter.isLoadingStream.listen((isLoading) {
-            if (isLoading == true) {
-              showLoadingDialoag(context);
-            } else {
-              hideLoadingDialog(context);
-            }
-          });
-
-          presenter.mainErrorStream.listen((error) {
-            if (error != null) {
-              showErrorMessage(context, error.description);
-            }
-          });
-
-          presenter.navigateToStream.listen((page) {
-            if (page?.isNotEmpty == true) {
-              Get.offAllNamed(page);
-            }
-          });
+          handleLoading(context: context, stream: presenter.isLoadingStream);
+          handleError(context: context, stream: presenter.mainErrorStream);
+          handleNavigation(
+              context: context, stream: presenter.navigateToStream);
 
           return GestureDetector(
-            onTap: _hideKeyboard,
+            onTap: () => hideKeyboard(context),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

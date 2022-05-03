@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_app/ui/components/components.dart';
 import 'package:flutter_clean_app/ui/helpers/helpers.dart';
 import 'package:flutter_clean_app/ui/pages/pages.dart';
-import 'package:get/get.dart';
+import '../../mixins/mixins.dart';
 
 import './components/components.dart';
 
-class SurveyResultPage extends StatelessWidget {
+class SurveyResultPage extends StatelessWidget
+    with LoadingManager, SessionManager {
   final SurveyResultPresenter presenter;
 
   const SurveyResultPage(this.presenter);
@@ -18,19 +19,9 @@ class SurveyResultPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Builder(builder: (context) {
-        presenter.isLoadingStream.listen((isLoading) {
-          if (isLoading == true) {
-            showLoadingDialoag(context);
-          } else {
-            hideLoadingDialog(context);
-          }
-        });
-
-        presenter.isSessionExpiredStream.listen((isExpired) {
-          if (isExpired == true) {
-            Get.offAllNamed('/login');
-          }
-        });
+        handleLoading(context: context, stream: presenter.isLoadingStream);
+        handleSessionExpired(
+            context: context, stream: presenter.isSessionExpiredStream);
 
         presenter.loadData();
 

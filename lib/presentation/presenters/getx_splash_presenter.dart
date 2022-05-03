@@ -1,11 +1,13 @@
 import 'package:flutter_clean_app/domain/usecases/usecases.dart';
+import 'package:flutter_clean_app/presentation/mixins/mixins.dart';
 import 'package:flutter_clean_app/ui/pages/pages.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-class GetxSplashPresenter implements SplashPresenter {
+class GetxSplashPresenter extends GetxController
+    with NavigateManager
+    implements SplashPresenter {
   final LoadCurrentAccount loadCurrentAccount;
-  var _navigateTo = RxString();
 
   GetxSplashPresenter({@required this.loadCurrentAccount});
 
@@ -14,12 +16,9 @@ class GetxSplashPresenter implements SplashPresenter {
     await Future.delayed(Duration(seconds: durationInSeconds));
     try {
       final account = await loadCurrentAccount.load();
-      _navigateTo.value = account?.token == null ? '/login' : '/surveys';
+      navigateTo = account?.token == null ? '/login' : '/surveys';
     } catch (e) {
-      _navigateTo.value = '/login';
+      navigateTo = '/login';
     }
   }
-
-  @override
-  Stream<String> get navigateToStream => _navigateTo.stream;
 }
